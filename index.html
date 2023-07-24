@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda de Juguetería</title>
+</head>
+<body>
+    <h3>Tienda de Juguetería</h3>
+    <table border="2">
+        <tr>
+            <th>N°</th> <th>Juguete</th> <th>Precio</th>
+        </tr>
+        <tr>
+            <td>1</td> <td>Monopolio</td> <td>70.99</td>
+        </tr>
+        <tr>
+            <td>2</td> <td>Ajedrez</td> <td>78.99</td>
+        </tr>
+        <tr>                     
+            <td>3</td> <td>Lego</td>    <td>100.99</td>
+        </tr>
+        <tr>                     
+            <td>4</td> <td>Dama</td>    <td>58.50</td>
+        </tr>
+        <tr>                     
+            <td>5</td> <td>Laberinto</td><td>35.00</td>
+        </tr>
+    </table>
+    <label for="producto">Producto:</label>
+    <select id="producto">
+        <option value="Monopolio">Monopolio</option>
+        <option value="Ajedrez">Ajedrez</option>
+        <option value="Lejo">Lejo</option>
+        <option value="Dama">Dama</option>
+        <option value="Laberino">Laberino</option>
+    </select>
+
+    <label for="cantidad">Cantidad:</label>
+    <input type="number" id="cantidad" value="1">
+
+    <button onclick="calcularTotal()">Calcular Total</button>
+    <button onclick="generarBoleta()">Generar Boleta</button>
+
+    <h2>Boleta</h2>
+    <div id="boleta"></div>
+
+    <script>
+    function calcularTotal() {
+    const productoSelect = document.getElementById('producto');
+    const cantidadInput = document.getElementById('cantidad');
+    const boletaDiv = document.getElementById('boleta');
+
+    const productoNombre = productoSelect.value;
+    const cantidad = parseInt(cantidadInput.value);
+
+    if (isNaN(cantidad) || cantidad < 1) {
+        alert('Ingresa una cantidad válida (mayor a 0).');
+        return;
+    }
+
+    const precio = obtenerPrecioProducto(productoNombre);
+    const subtotal = cantidad * precio;
+    const descuento = calcularDescuento(cantidad, subtotal);
+    const total = subtotal - descuento;
+
+    const boletaHTML = `
+        <p>==================</p>
+        <p><b>Producto:</b> ${productoNombre}</p>
+        <p><b>Cantidad:</b> ${cantidad}</p>
+        <p><b>Precio:</b> ${precio.toFixed(2)}</p>
+        <p><b>Sub total:</b> ${subtotal.toFixed(2)}</p>
+        <p><b>Descuento:</b> ${descuento.toFixed(2)}</p>
+        <p>------------------------------</p>
+        <p><b>Total a pagar:</b> ${total.toFixed(2)}</p>
+        <p>____________________</p>
+    `;
+    boletaDiv.innerHTML = boletaHTML;
+}
+
+function obtenerPrecioProducto(productoNombre) {
+    const precios = {
+        'Monopolio': 70.99,
+        'Ajedrez': 78.99,
+        'Lejo': 100.99,
+        'Dama': 58.50,
+        'Laberino': 35.00
+    };
+
+    return precios[productoNombre];
+}
+
+function calcularDescuento(cantidad, subtotal) {
+    let descuento = 0;
+
+    if (cantidad < 10) {
+        descuento = 0.035; // 3.5%
+    } else if (cantidad >= 10 && cantidad <= 20) {
+        descuento = 0.07; // 7%
+    } else if (cantidad > 20) {
+        descuento = 0.095; // 9.5%
+    }
+
+    return subtotal * descuento;
+}
+
+function generarBoleta() {
+    calcularTotal(); // Actualiza los datos antes de generar la boleta
+
+}
+
+    </script>
+</body>
+</html>
